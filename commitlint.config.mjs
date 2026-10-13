@@ -8,6 +8,7 @@ const config = {
             'always',
             [
                 'api',
+                'cercle',
                 'ci',
                 'deps',
                 'i18n',
