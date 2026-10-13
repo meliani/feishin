@@ -14,6 +14,7 @@ import {
     isLegacyAuth,
     isServerLock,
 } from '/@/renderer/features/action-required/utils/window-properties';
+import { CercleSsoLogin } from '/@/renderer/features/cercle/sso/cercle-sso-login';
 import JellyfinIcon from '/@/renderer/features/servers/assets/jellyfin.png';
 import NavidromeIcon from '/@/renderer/features/servers/assets/navidrome.png';
 import SubsonicIcon from '/@/renderer/features/servers/assets/opensubsonic.png';
@@ -388,7 +389,9 @@ const LoginRoute = () => {
 const LoginRouteWithBoundary = () => {
     return (
         <PageErrorBoundary>
-            <LoginRoute />
+            <CercleSsoLogin>
+                <LoginRoute />
+            </CercleSsoLogin>
         </PageErrorBoundary>
     );
 };

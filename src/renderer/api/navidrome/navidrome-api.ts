@@ -8,6 +8,7 @@ import qs from 'qs';
 import i18n from '/@/i18n/i18n';
 import { validateResponse } from '/@/renderer/api/response-validation';
 import { authenticationFailure } from '/@/renderer/api/utils';
+import { retryWithNavidromeSso } from '/@/renderer/features/cercle/sso/navidrome-sso';
 import { useAuthStore } from '/@/renderer/store';
 import { logger } from '/@/renderer/utils/logger';
 import { getServerUrl } from '/@/renderer/utils/normalize-server-url';
@@ -374,6 +375,15 @@ axiosClient.interceptors.response.use(
     (error) => {
         if (error.response && error.response.status === 401) {
             const currentServer = useAuthStore.getState().currentServer;
+
+            const ssoRetry = retryWithNavidromeSso(
+                error,
+                (config) => axiosClient.request(config),
+                () => limitedFail(currentServer),
+            );
+            if (ssoRetry) {
+                return ssoRetry;
+            }
 
             if (localSettings && currentServer?.savePassword) {
                 return localSettings
