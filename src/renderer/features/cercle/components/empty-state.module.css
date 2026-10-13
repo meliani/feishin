@@ -1,0 +1,8 @@
+.empty {
+    padding: var(--theme-spacing-xl) var(--theme-spacing-md);
+    text-align: center;
+}
+
+.message {
+    max-width: 32rem;
+}

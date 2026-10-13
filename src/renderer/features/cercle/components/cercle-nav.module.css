@@ -1,0 +1,36 @@
+.nav {
+    display: flex;
+    gap: var(--theme-spacing-sm);
+    align-items: center;
+}
+
+.links {
+    display: flex;
+    flex: 1;
+    flex-wrap: nowrap;
+    gap: var(--theme-spacing-xs);
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.dot {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin-right: var(--theme-spacing-sm);
+    background: var(--theme-colors-foreground-muted);
+    border-radius: 50%;
+}
+
+.open {
+    background: var(--theme-colors-state-success);
+}
+
+.connecting {
+    background: var(--theme-colors-state-warning);
+}
+
+.closed {
+    background: var(--theme-colors-state-error);
+}

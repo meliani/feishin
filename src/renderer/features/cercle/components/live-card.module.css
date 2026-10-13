@@ -1,0 +1,100 @@
+.card {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: var(--theme-spacing-sm);
+    width: 16rem;
+    min-width: 0;
+    padding: var(--theme-spacing-sm);
+    background: var(--theme-colors-surface);
+    border: 1px solid var(--theme-colors-border);
+    border-radius: var(--theme-radius-md);
+}
+
+.large {
+    width: auto;
+}
+
+.top {
+    display: flex;
+    gap: var(--theme-spacing-sm);
+    min-width: 0;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.user {
+    display: flex;
+    gap: var(--theme-spacing-xs);
+    align-items: center;
+    min-width: 0;
+}
+
+.progress-row {
+    display: flex;
+    gap: var(--theme-spacing-sm);
+    align-items: center;
+}
+
+.progress {
+    flex: 1;
+    height: 4px;
+    overflow: hidden;
+    background: var(--theme-colors-border);
+    border-radius: 2px;
+}
+
+.bar {
+    height: 100%;
+    background: var(--theme-colors-primary);
+    transition: width 1s linear;
+}
+
+.equalizer {
+    display: inline-flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 12px;
+}
+
+.equalizer span {
+    width: 3px;
+    background: var(--theme-colors-primary);
+    border-radius: 1px;
+    animation: eq 1s ease-in-out infinite;
+}
+
+.equalizer span:nth-child(2) {
+    animation-delay: -0.4s;
+}
+
+.equalizer span:nth-child(3) {
+    animation-delay: -0.7s;
+}
+
+@keyframes eq {
+    0%,
+    100% {
+        height: 30%;
+    }
+
+    50% {
+        height: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .equalizer span {
+        height: 70%;
+        animation: none;
+    }
+
+    .bar {
+        transition: none;
+    }
+}

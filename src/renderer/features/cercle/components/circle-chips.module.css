@@ -1,0 +1,30 @@
+.chips {
+    display: flex;
+    gap: var(--theme-spacing-xs);
+    padding-bottom: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.chip {
+    flex-shrink: 0;
+    height: 30px;
+    padding: 0 var(--theme-spacing-md);
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-colors-foreground);
+    white-space: nowrap;
+    cursor: pointer;
+    background: var(--theme-colors-surface);
+    border: 1px solid var(--theme-colors-border);
+    border-radius: 15px;
+}
+
+.chip:hover {
+    border-color: var(--theme-colors-foreground-muted);
+}
+
+.active {
+    color: var(--theme-colors-primary-contrast);
+    background: var(--theme-colors-primary-filled);
+    border-color: var(--theme-colors-primary-filled);
+}
