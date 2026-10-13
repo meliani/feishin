@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { HideFromCercleAction } from '/@/renderer/features/cercle/components/hide-from-cercle-action';
 import { AddToPlaylistAction } from '/@/renderer/features/context-menu/actions/add-to-playlist-action';
 import { DownloadAction } from '/@/renderer/features/context-menu/actions/download-action';
 import { EditMetadataAction } from '/@/renderer/features/context-menu/actions/edit-metadata-action';
@@ -43,6 +44,7 @@ export const AlbumContextMenu = ({ items, type }: AlbumContextMenuProps) => {
             <GoToAction items={items} />
             <ContextMenu.Divider />
             <EditMetadataAction albumIds={ids} />
+            <HideFromCercleAction items={items} kind="album" />
             <GetInfoAction disabled={items.length === 0} items={items} />
         </ContextMenu.Content>
     );
