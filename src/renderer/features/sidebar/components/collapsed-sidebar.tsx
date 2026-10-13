@@ -120,6 +120,7 @@ export const CollapsedSidebar = () => {
                         <AppMenu />
                     </DropdownMenu.Dropdown>
                 </DropdownMenu>
+                <CercleCollapsedSidebarItem placement="top" />
                 {sidebarItemsWithRoute.map((item) =>
                     item.id === 'Collections' ? (
                         collections && collections.length > 0 ? (

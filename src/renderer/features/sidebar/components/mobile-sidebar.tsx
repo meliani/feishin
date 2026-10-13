@@ -88,6 +88,7 @@ export const MobileSidebar = () => {
                     defaultValue={['library', 'cercle', 'playlists']}
                     multiple
                 >
+                    <CercleSidebarSection placement="top" />
                     <Accordion.Item value="library">
                         <Accordion.Control>
                             <Text fw={600} variant="secondary">

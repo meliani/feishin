@@ -140,6 +140,7 @@ export const Sidebar = () => {
                     defaultValue={['library', 'cercle', 'collections', 'playlists']}
                     multiple
                 >
+                    <CercleSidebarSection placement="top" />
                     <Accordion.Item value="library">
                         <Accordion.Control>
                             <Text fw={500} variant="secondary">

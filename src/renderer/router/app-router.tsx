@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { HashRouter, Route, Routes } from 'react-router';
 
+import { CercleHomeRedirect } from '/@/renderer/features/cercle/components/cercle-home-redirect';
 import { ShuffleAllContextModal } from '/@/renderer/features/player/components/shuffle-all-modal';
 import { SettingsContextModal } from '/@/renderer/features/settings/components/settings-modal';
 import { RouterErrorBoundary } from '/@/renderer/features/shared/components/router-error-boundary';
@@ -229,8 +230,22 @@ export const AppRouter = () => {
                             <Route element={<TitlebarOutlet />}>
                                 <Route element={<AppOutlet />}>
                                     <Route element={<ResponsiveLayout />}>
-                                        <Route element={<HomeRoute />} index />
-                                        <Route element={<HomeRoute />} path={AppRoute.HOME} />
+                                        <Route
+                                            element={
+                                                <CercleHomeRedirect>
+                                                    <HomeRoute />
+                                                </CercleHomeRedirect>
+                                            }
+                                            index
+                                        />
+                                        <Route
+                                            element={
+                                                <CercleHomeRedirect>
+                                                    <HomeRoute />
+                                                </CercleHomeRedirect>
+                                            }
+                                            path={AppRoute.HOME}
+                                        />
                                         <Route element={<SearchRoute />} path={AppRoute.SEARCH} />
                                         <Route
                                             element={<FavoritesRoute />}
