@@ -1,0 +1,52 @@
+.thread {
+    display: flex;
+    flex-direction: column;
+    gap: var(--theme-spacing-sm);
+    padding-top: var(--theme-spacing-sm);
+    border-top: 1px solid var(--theme-colors-border);
+}
+
+.comment {
+    display: flex;
+    gap: var(--theme-spacing-sm);
+    align-items: flex-start;
+}
+
+.body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.actions {
+    margin-left: auto;
+    opacity: 0.6;
+}
+
+.comment:hover .actions,
+.actions:focus-within {
+    opacity: 1;
+}
+
+.text {
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    gap: var(--theme-spacing-xs);
+}
+
+.composer {
+    display: flex;
+    gap: var(--theme-spacing-sm);
+    align-items: flex-end;
+}
+
+.composer > :first-child {
+    flex: 1;
+}

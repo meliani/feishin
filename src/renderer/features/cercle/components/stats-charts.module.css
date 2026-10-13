@@ -1,0 +1,95 @@
+.figure {
+    display: flex;
+    flex-direction: column;
+    gap: var(--theme-spacing-xs);
+    min-width: 0;
+    margin: 0;
+}
+
+.caption {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-colors-foreground-muted);
+    text-align: center;
+}
+
+.clock {
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+}
+
+.ring {
+    fill: none;
+    stroke: var(--theme-colors-border);
+    stroke-width: 1;
+}
+
+.spoke {
+    stroke: var(--theme-colors-primary);
+    stroke-width: 6;
+    stroke-linecap: round;
+}
+
+.spoke-empty {
+    stroke: var(--theme-colors-border);
+    stroke-width: 6;
+    stroke-linecap: round;
+}
+
+.label {
+    font-size: 10px;
+    color: var(--theme-colors-foreground-muted);
+    fill: var(--theme-colors-foreground-muted);
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    height: 160px;
+}
+
+.weekday {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    min-width: 0;
+}
+
+.weekday-track {
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    width: 100%;
+    max-width: 32px;
+    background: var(--theme-colors-background);
+    border-radius: 4px;
+}
+
+.weekday-bar {
+    width: 100%;
+    min-height: 2px;
+    background: var(--theme-colors-primary);
+    border-radius: 4px;
+}
+
+.daily {
+    width: 100%;
+    height: 120px;
+}
+
+.day-bar {
+    fill: var(--theme-colors-primary);
+}
+
+.day-bar:hover {
+    opacity: 0.7;
+}
+
+.axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--theme-font-size-xs);
+    color: var(--theme-colors-foreground-muted);
+}

@@ -1,0 +1,23 @@
+.cover {
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: var(--theme-colors-surface);
+    border-radius: var(--theme-radius-md);
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover,
+.clickable:focus-visible {
+    outline: 2px solid var(--theme-colors-primary);
+    outline-offset: 1px;
+}

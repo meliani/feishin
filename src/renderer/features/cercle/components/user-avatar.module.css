@@ -1,0 +1,11 @@
+.avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: hsl(var(--cercle-avatar-hue) 70% 92%);
+    user-select: none;
+    background: hsl(var(--cercle-avatar-hue) 45% 38%);
+    border-radius: 50%;
+}
