@@ -39,6 +39,7 @@ Scope is optional. When present, it must be one of (see `commitlint.config.mjs` 
 
 | Scope | Use for |
 |-------|---------|
+| `cercle` | Cercle social layer (feed, live, stats, circles, rooms) in `features/cercle` |
 | `player` | Queue, engines, mpv/web, playerbar, now-playing playback (any process) |
 | `radio` | Radio stations / radio playback |
 | `lyrics` | Lyrics fetch, display, lyrics-specific options |
