@@ -1,6 +1,7 @@
 declare global {
     interface Window {
         ANALYTICS_DISABLED?: boolean | string;
+        CERCLE_HUB_URL?: string;
         FS_AUTO_DJ_ALBUM_STRATEGY?: string;
         FS_AUTO_DJ_ALLOW_DUPLICATES?: string;
         FS_AUTO_DJ_ENABLED?: string;
