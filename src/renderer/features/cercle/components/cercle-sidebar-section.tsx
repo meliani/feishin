@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 
 import '/@/renderer/features/cercle/i18n/cercle-i18n';
+import { isCercleHomeEnabled } from '/@/renderer/features/cercle/utils/cercle-env';
 import { CollapsedSidebarItem } from '/@/renderer/features/sidebar/components/collapsed-sidebar-item';
 import { SidebarItem } from '/@/renderer/features/sidebar/components/sidebar-item';
 import { Accordion } from '/@/shared/components/accordion/accordion';
@@ -17,10 +18,20 @@ const ITEMS: { icon: keyof typeof AppIcon; key: string; to: string }[] = [
     { icon: 'group', key: 'circles', to: '/cercle/circles' },
 ];
 
+// Sidebars mount this twice: once above the library (used when CERCLE_HOME=true makes Cercle the
+// landing page) and once below it (default). Only the matching placement renders.
+type Placement = 'default' | 'top';
+
+const isPlacementActive = (placement: Placement) => (placement === 'top') === isCercleHomeEnabled();
+
 // One accordion section in the expanded and mobile sidebars. Kept out of the user-sortable
 // sidebarItems setting so upstream settings migrations never have to know about it.
-export const CercleSidebarSection = () => {
+export const CercleSidebarSection = ({ placement = 'default' }: { placement?: Placement }) => {
     const { t } = useTranslation();
+
+    if (!isPlacementActive(placement)) {
+        return null;
+    }
 
     return (
         <Accordion.Item value="cercle">
@@ -43,8 +54,16 @@ export const CercleSidebarSection = () => {
     );
 };
 
-export const CercleCollapsedSidebarItem = () => {
+export const CercleCollapsedSidebarItem = ({
+    placement = 'default',
+}: {
+    placement?: Placement;
+}) => {
     const { t } = useTranslation();
+
+    if (!isPlacementActive(placement)) {
+        return null;
+    }
 
     return (
         <CollapsedSidebarItem
