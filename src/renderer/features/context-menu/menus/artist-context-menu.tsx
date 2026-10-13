@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { HideFromCercleAction } from '/@/renderer/features/cercle/components/hide-from-cercle-action';
 import { AddToPlaylistAction } from '/@/renderer/features/context-menu/actions/add-to-playlist-action';
 import { DownloadAction } from '/@/renderer/features/context-menu/actions/download-action';
 import { GetInfoAction } from '/@/renderer/features/context-menu/actions/get-info-action';
@@ -38,6 +39,7 @@ export const ArtistContextMenu = ({ items, type }: ArtistContextMenuProps) => {
             <DownloadAction ids={ids} />
             <ShareAction ids={ids} itemType={LibraryItem.ARTIST} />
             <ContextMenu.Divider />
+            <HideFromCercleAction items={items} kind="artist" />
             <GetInfoAction disabled={items.length === 0} items={items} />
         </ContextMenu.Content>
     );
