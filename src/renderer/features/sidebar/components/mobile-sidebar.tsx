@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './mobile-sidebar.module.css';
 
+import { CercleSidebarSection } from '/@/renderer/features/cercle/components/cercle-sidebar-section';
 import { ActionBar } from '/@/renderer/features/sidebar/components/action-bar';
 import { SidebarIcon } from '/@/renderer/features/sidebar/components/sidebar-icon';
 import { SidebarItem } from '/@/renderer/features/sidebar/components/sidebar-item';
@@ -84,7 +85,7 @@ export const MobileSidebar = () => {
                         item: styles.accordionItem,
                         root: styles.accordionRoot,
                     }}
-                    defaultValue={['library', 'playlists']}
+                    defaultValue={['library', 'cercle', 'playlists']}
                     multiple
                 >
                     <Accordion.Item value="library">
@@ -106,6 +107,7 @@ export const MobileSidebar = () => {
                             })}
                         </Accordion.Panel>
                     </Accordion.Item>
+                    <CercleSidebarSection />
                     {sidebarPlaylistList && <MobileSidebarPlaylistSection />}
                 </Accordion>
             </ScrollArea>

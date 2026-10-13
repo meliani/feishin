@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './sidebar.module.css';
 
 import { useItemImageUrl } from '/@/renderer/components/item-image/item-image';
+import { CercleSidebarSection } from '/@/renderer/features/cercle/components/cercle-sidebar-section';
 import { ContextMenuController } from '/@/renderer/features/context-menu/context-menu-controller';
 import {
     useIsRadioActive,
@@ -136,7 +137,7 @@ export const Sidebar = () => {
                         item: styles.accordionItem,
                         root: styles.accordionRoot,
                     }}
-                    defaultValue={['library', 'collections', 'playlists']}
+                    defaultValue={['library', 'cercle', 'collections', 'playlists']}
                     multiple
                 >
                     <Accordion.Item value="library">
@@ -158,6 +159,7 @@ export const Sidebar = () => {
                             })}
                         </Accordion.Panel>
                     </Accordion.Item>
+                    <CercleSidebarSection />
                     <SidebarCollectionList />
                     {sidebarPlaylistList && <SidebarPlaylistSection />}
                 </Accordion>
