@@ -20,6 +20,28 @@ All module code lives in `src/renderer/features/cercle/`:
 | `store/` | persisted hub URL setting and hub session tokens, active room |
 | `i18n/` | English and French strings, registered with `i18n.addResourceBundle` |
 
+## Environment variables (web image)
+
+All are optional and empty by default; they are written into `settings.js` at container start.
+
+| Variable | Values | Effect |
+|---|---|---|
+| `CERCLE_HUB_URL` | URL or path (`/hub`) | Hub address, see below. |
+| `CERCLE_SSO_LOGIN` | `true` / empty | Sign in without a password through a reverse proxy that authenticates users for Navidrome (Navidrome `ExtAuth`). Needs `SERVER_LOCK=true`, `SERVER_TYPE=navidrome`, and Navidrome reachable from the browser with the proxy cookie (same site). |
+| `CERCLE_HOME` | `true` / empty | Open on the Cercle feed instead of the Feishin home page (first visit to `/` per page load) and show the Cercle sidebar section above the library. |
+| `FS_GENERAL_LANGUAGE` | e.g. `fr` | Upstream Feishin setting: default UI language on first run. Cercle ships English and French. |
+
+### Single sign-on (`CERCLE_SSO_LOGIN`)
+
+When Navidrome sits behind an authenticating reverse proxy and trusts its user header
+(`ExtAuth.TrustedSources` + `ExtAuth.UserHeader`), Navidrome's own UI index (`{SERVER_URL}/app/`)
+embeds `window.__APP_CONFIG__`, whose `auth` member is the same payload as a password login
+(JWT plus Subsonic salt/token). With `CERCLE_SSO_LOGIN=true` the login screen first fetches that
+page with the browser's cookies, reads `auth`, and stores the server entry exactly as a password
+login would, so the form is never shown. When the Navidrome JWT later expires (HTTP 401), the same
+request renews it silently and replays the call. If the proxy session is gone or the page has no
+`auth`, the normal password form appears with a short note. Code: `features/cercle/sso/`.
+
 ## Hub URL
 
 Resolved in this order:
@@ -42,6 +64,9 @@ services:
             SERVER_URL: https://navidrome.example.com
             SERVER_LOCK: 'true'
             CERCLE_HUB_URL: https://navidrome.example.com/hub
+            CERCLE_SSO_LOGIN: 'true'
+            CERCLE_HOME: 'true'
+            FS_GENERAL_LANGUAGE: fr
             ANALYTICS_DISABLED: 'true'
         ports:
             - 9180:9180
@@ -59,14 +84,16 @@ Kept to registration one-liners so rebases stay easy:
 
 | File | Change |
 |---|---|
-| `src/renderer/router/app-router.tsx` | lazy import + `<Route path="/cercle/*">` |
-| `src/renderer/features/sidebar/components/sidebar.tsx` | `<CercleSidebarSection />`, `'cercle'` in accordion `defaultValue` |
+| `src/renderer/router/app-router.tsx` | lazy import + `<Route path="/cercle/*">`; `HomeRoute` wrapped in `<CercleHomeRedirect>` |
+| `src/renderer/features/login/routes/login-route.tsx` | login form wrapped in `<CercleSsoLogin>` |
+| `src/renderer/api/navidrome/navidrome-api.ts` | `retryWithNavidromeSso` first in the 401 handler (no-op unless `CERCLE_SSO_LOGIN`) |
+| `src/renderer/features/sidebar/components/sidebar.tsx` | `<CercleSidebarSection placement="top" />` above the library, `<CercleSidebarSection />` below it, `'cercle'` in accordion `defaultValue` |
 | `src/renderer/features/sidebar/components/mobile-sidebar.tsx` | same |
-| `src/renderer/features/sidebar/components/collapsed-sidebar.tsx` | `<CercleCollapsedSidebarItem />` |
+| `src/renderer/features/sidebar/components/collapsed-sidebar.tsx` | `<CercleCollapsedSidebarItem />` (top and bottom placements) |
 | `src/renderer/features/player/components/audio-players.tsx` | `<CercleHook />` next to `<ScrobbleHook />` |
 | `src/renderer/features/context-menu/menus/{song,album,album-artist,artist}-context-menu.tsx` | `<HideFromCercleAction />` |
 | `src/shared/components/icon/icon.tsx` | a few Lucide icons in `AppIcon` |
-| `src/renderer/global.d.ts`, `settings.js.template`, `Dockerfile` | `CERCLE_HUB_URL` |
+| `src/renderer/global.d.ts`, `settings.js.template`, `Dockerfile` | `CERCLE_HUB_URL`, `CERCLE_SSO_LOGIN`, `CERCLE_HOME` |
 | `commitlint.config.mjs`, `docs/agents/commits.md` | `cercle` commit scope |
 | `.github/workflows/cercle-docker.yml` | image build for this fork (new file) |
 
