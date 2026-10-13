@@ -8,7 +8,10 @@ import qs from 'qs';
 import i18n from '/@/i18n/i18n';
 import { validateResponse } from '/@/renderer/api/response-validation';
 import { authenticationFailure } from '/@/renderer/api/utils';
-import { retryWithNavidromeSso } from '/@/renderer/features/cercle/sso/navidrome-sso';
+import {
+    navidromeBearer,
+    retryWithNavidromeSso,
+} from '/@/renderer/features/cercle/sso/navidrome-sso';
 import { useAuthStore } from '/@/renderer/store';
 import { logger } from '/@/renderer/utils/logger';
 import { getServerUrl } from '/@/renderer/utils/normalize-server-url';
@@ -493,14 +496,14 @@ export const ndApiClient = (args: {
     return initClient(contract, {
         api: async ({ body, headers, method, path, route }) => {
             let baseUrl: string | undefined;
-            let token: string | undefined;
+            let bearer: string | undefined;
 
             const { params, path: api } = parsePath(path);
 
             if (server) {
                 const serverUrl = getServerUrl(server, forceRemoteUrl);
                 baseUrl = serverUrl ? `${serverUrl}/api` : undefined;
-                token = server?.ndCredential;
+                bearer = navidromeBearer(server?.ndCredential);
             } else {
                 baseUrl = url;
             }
@@ -512,7 +515,7 @@ export const ndApiClient = (args: {
                     data: body,
                     headers: {
                         ...headers,
-                        ...(token && { 'x-nd-authorization': `Bearer ${token}` }),
+                        ...(bearer && { 'x-nd-authorization': bearer }),
                     },
                     method: method as Method,
                     params,

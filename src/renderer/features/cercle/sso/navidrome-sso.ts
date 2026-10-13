@@ -11,9 +11,13 @@ import { logger } from '/@/renderer/utils/logger';
 import { ServerListItemWithCredential, ServerType } from '/@/shared/types/domain-types';
 
 // Navidrome's UI index, when reached through a trusted reverse proxy carrying the ExtAuth user
-// header, embeds `window.__APP_CONFIG__ = "<JSON>"` whose `auth` member is the same payload as a
-// successful POST /auth/login (token, subsonicSalt, subsonicToken, ...). Reading it lets a
-// single-sign-on deployment skip Feishin's password form entirely.
+// header, embeds `window.__APP_CONFIG__ = "<JSON>"` whose `auth` member mirrors a successful
+// POST /auth/login (subsonicSalt, subsonicToken, ...). Reading it lets a single-sign-on deployment
+// skip Feishin's password form entirely.
+//
+// Recent Navidrome versions (seen on 0.64) leave the JWT (`token`) out of that payload: requests
+// through the proxy are authenticated by its user header, so none is needed. The server entry then
+// carries NAVIDROME_PROXY_SESSION instead of a JWT, and no bearer header is sent.
 
 export type NavidromeSsoAuth = {
     id?: string;
@@ -21,9 +25,16 @@ export type NavidromeSsoAuth = {
     name?: string;
     subsonicSalt: string;
     subsonicToken: string;
-    token: string;
+    token?: string;
     username: string;
 };
+
+// Stands in for the Navidrome JWT when the reverse proxy authenticates every request. Feishin
+// treats a Navidrome server without ndCredential as signed out, so the field cannot stay empty.
+export const NAVIDROME_PROXY_SESSION = 'cercle-proxy-session';
+
+export const navidromeBearer = (ndCredential?: string) =>
+    ndCredential && ndCredential !== NAVIDROME_PROXY_SESSION ? `Bearer ${ndCredential}` : undefined;
 
 const SSO_TIMEOUT_MS = 10 * 1000;
 const NAVIDROME_UI_PATH = '/app/';
@@ -66,11 +77,12 @@ const toSsoAuth = (config: null | Record<string, unknown>): NavidromeSsoAuth | n
     if (
         !auth ||
         typeof auth.username !== 'string' ||
-        typeof auth.token !== 'string' ||
+        (auth.token !== undefined && typeof auth.token !== 'string') ||
         typeof auth.subsonicSalt !== 'string' ||
         typeof auth.subsonicToken !== 'string' ||
         !auth.username ||
-        !auth.token
+        !auth.subsonicSalt ||
+        !auth.subsonicToken
     ) {
         return null;
     }
@@ -126,7 +138,7 @@ export const applyNavidromeSsoAuth = (auth: NavidromeSsoAuth): ServerListItemWit
         credential: `u=${auth.username}&s=${auth.subsonicSalt}&t=${auth.subsonicToken}`,
         isAdmin: Boolean(auth.isAdmin),
         name: window.SERVER_NAME || existing?.name || '',
-        ndCredential: auth.token,
+        ndCredential: auth.token || NAVIDROME_PROXY_SESSION,
         remoteUrl,
         url,
         userId: auth.id || null,
@@ -200,7 +212,14 @@ export const retryWithNavidromeSso = <T>(
         }
 
         config._cercleSso = true;
-        config.headers = { ...config.headers, 'x-nd-authorization': `Bearer ${auth.token}` };
+        const headers = { ...config.headers };
+        const bearer = navidromeBearer(auth.token);
+        if (bearer) {
+            headers['x-nd-authorization'] = bearer;
+        } else {
+            delete headers['x-nd-authorization'];
+        }
+        config.headers = headers;
         return replay(config);
     });
 };

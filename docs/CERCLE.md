@@ -35,11 +35,13 @@ All are optional and empty by default; they are written into `settings.js` at co
 
 When Navidrome sits behind an authenticating reverse proxy and trusts its user header
 (`ExtAuth.TrustedSources` + `ExtAuth.UserHeader`), Navidrome's own UI index (`{SERVER_URL}/app/`)
-embeds `window.__APP_CONFIG__`, whose `auth` member is the same payload as a password login
-(JWT plus Subsonic salt/token). With `CERCLE_SSO_LOGIN=true` the login screen first fetches that
-page with the browser's cookies, reads `auth`, and stores the server entry exactly as a password
-login would, so the form is never shown. When the Navidrome JWT later expires (HTTP 401), the same
-request renews it silently and replays the call. If the proxy session is gone or the page has no
+embeds `window.__APP_CONFIG__`, whose `auth` member mirrors a password login (Subsonic
+salt/token, and on older Navidrome versions a JWT). With `CERCLE_SSO_LOGIN=true` the login screen
+first fetches that page with the browser's cookies, reads `auth`, and stores the server entry
+exactly as a password login would, so the form is never shown. Navidrome 0.64 leaves the JWT out:
+the native API is then authenticated by the proxy's user header alone, the entry stores the
+placeholder `cercle-proxy-session` instead of a JWT, and no bearer header is sent. On HTTP 401
+(proxy session or JWT expired) the same request renews the session silently and replays the call. If the proxy session is gone or the page has no
 `auth`, the normal password form appears with a short note. Code: `features/cercle/sso/`.
 
 ## Hub URL
