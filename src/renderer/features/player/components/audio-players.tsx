@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import { eventEmitter } from '/@/renderer/events/event-emitter';
 import { UserFavoriteEventPayload, UserRatingEventPayload } from '/@/renderer/events/events';
+import { CercleHook } from '/@/renderer/features/cercle/components/cercle-hook';
 import { DiscordRpcHook } from '/@/renderer/features/discord-rpc/use-discord-rpc';
 import { DlnaPlayer } from '/@/renderer/features/player/audio-player/dlna-player';
 import { MainPlayerListenerHook } from '/@/renderer/features/player/audio-player/hooks/use-main-player-listener';
@@ -134,6 +135,7 @@ export const AudioPlayers = () => {
         <>
             <SleepTimerHook />
             <ScrobbleHook />
+            <CercleHook />
             <PowerSaveBlockerHook />
             <DiscordRpcHook />
             <MPRISHook />
