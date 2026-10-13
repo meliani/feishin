@@ -256,6 +256,9 @@ const en = {
         share_stats: 'Stats',
         share_statsHelp: 'Show my stats and count me in circle stats.',
     },
+    sso: {
+        unavailable: 'Automatic sign-in is not available right now. Sign in with your password.',
+    },
     stats: {
         activeDays: 'Active days',
         albums: 'Albums',
@@ -561,6 +564,10 @@ const fr: typeof en = {
         share_liveHelp: "Montrer ce que j'écoute en ce moment.",
         share_stats: 'Statistiques',
         share_statsHelp: 'Montrer mes stats et me compter dans les stats du cercle.',
+    },
+    sso: {
+        unavailable:
+            "La connexion automatique n'est pas disponible pour le moment. Connectez-vous avec votre mot de passe.",
     },
     stats: {
         activeDays: 'Jours actifs',
