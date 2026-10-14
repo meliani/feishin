@@ -43,6 +43,15 @@ jobs:
         env:
             NODE_OPTIONS: --max-old-space-size=4096
             MAIN_VITE_CERCLE_DESKTOP: 'true'
+            # Optional: bake one server into the app (repository variables, Settings > Secrets and
+            # variables > Actions > Variables). Empty = the usual "add a server" screen.
+            RENDERER_VITE_CERCLE_SERVER_URL: ${{ vars.CERCLE_SERVER_URL }}
+            RENDERER_VITE_CERCLE_SERVER_NAME: ${{ vars.CERCLE_SERVER_NAME }}
+            RENDERER_VITE_CERCLE_SERVER_TYPE: ${{ vars.CERCLE_SERVER_TYPE }}
+            RENDERER_VITE_CERCLE_HUB_URL: ${{ vars.CERCLE_HUB_URL }}
+            RENDERER_VITE_CERCLE_HOME: ${{ vars.CERCLE_HOME }}
+            RENDERER_VITE_CERCLE_DEVICE_LOGIN_URL: ${{ vars.CERCLE_DEVICE_LOGIN_URL }}
+            RENDERER_VITE_CERCLE_LANGUAGE: ${{ vars.CERCLE_LANGUAGE }}
         steps:
             - uses: actions/checkout@v6
 
@@ -64,6 +73,11 @@ jobs:
                   retry_on: error
                   shell: bash # Windows default is Windows PowerShell 5, which has no &&
                   command: pnpm run build && pnpm exec electron-builder --config electron-builder-cercle.yml --${{ matrix.platform }} --publish never
+
+            - name: Check the baked-in server
+              if: ${{ vars.CERCLE_SERVER_URL != '' }}
+              shell: bash
+              run: grep -rqF "$RENDERER_VITE_CERCLE_SERVER_URL" out/renderer && echo "server URL is in the renderer bundle"
 
             - uses: actions/upload-artifact@v4
               with:
@@ -102,4 +116,4 @@ jobs:
                   - Windows: \`Feishin-Cercle-$VERSION-win-x64.exe\` (installer) or the \`.zip\` (portable).
                   - macOS (Intel): \`Feishin-Cercle-$VERSION-mac-x64.dmg\`. The app is not notarized: the first time, right-click the app → Open → Open. If macOS says it is damaged, run \`xattr -cr \"/Applications/Feishin Cercle.app\"\` once.
 
-                  Add your server as type **OpenSubsonic** (not Navidrome) when it sits behind single sign-on. Automatic updates are off in these builds; download the next release here."
+                  When this build has a server built in, the app opens straight on its login: type your username and password, or click **Sign in with the browser**. Otherwise, add your server as type **OpenSubsonic** when it sits behind single sign-on. Automatic updates are off in these builds; download the next release here."

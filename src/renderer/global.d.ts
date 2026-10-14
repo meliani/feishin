@@ -1,6 +1,7 @@
 declare global {
     interface Window {
         ANALYTICS_DISABLED?: boolean | string;
+        CERCLE_DEVICE_LOGIN_URL?: string;
         CERCLE_HOME?: boolean | string;
         CERCLE_HUB_URL?: string;
         CERCLE_SSO_LOGIN?: boolean | string;
