@@ -68,6 +68,16 @@ const en = {
         idle: 'Live updates off',
         open: 'Live updates on',
     },
+    device: {
+        button: 'Sign in with the browser',
+        cancel: 'Cancel',
+        expired: 'The code expired. Try again.',
+        failed: 'Could not reach the server. Try again, or sign in with your password.',
+        or: 'or',
+        reopen: 'Open the page again',
+        waiting:
+            'Your browser opened. Sign in there and check that it shows this code, then confirm:',
+    },
     feed: {
         addReaction: 'Add reaction',
         allCircles: 'All',
@@ -373,6 +383,16 @@ const fr: typeof en = {
         connecting: 'Connexion aux mises à jour en direct',
         idle: 'Mises à jour en direct désactivées',
         open: 'Mises à jour en direct actives',
+    },
+    device: {
+        button: 'Se connecter avec le navigateur',
+        cancel: 'Annuler',
+        expired: 'Le code a expiré. Réessayez.',
+        failed: 'Serveur injoignable. Réessayez, ou connectez-vous avec votre mot de passe.',
+        or: 'ou',
+        reopen: 'Rouvrir la page',
+        waiting:
+            "Le navigateur s'est ouvert. Connectez-vous et vérifiez qu'il affiche ce code, puis confirmez :",
     },
     feed: {
         addReaction: 'Réagir',

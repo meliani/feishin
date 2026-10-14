@@ -62,6 +62,39 @@ On the desktop, `CERCLE_SSO_LOGIN` does not apply. Behind an authenticating reve
 server as **OpenSubsonic** (the native Navidrome API sits behind the proxy login); the hub then needs
 the desktop origin in `CERCLE_CORS_ORIGINS` (`null,file://`).
 
+### One server built in (`vars.CERCLE_*`)
+
+Desktop builds have no `settings.js`, so the workflow passes these **repository variables**
+(Settings → Secrets and variables → Actions → Variables) to the renderer as `RENDERER_VITE_CERCLE_*`;
+`features/cercle/desktop/cercle-desktop-defaults.ts` turns them into the same `window` switches the web
+image uses, and turns on `SERVER_LOCK`. The installed app then opens on a login form for that one
+server. All optional; with none set the build behaves like upstream.
+
+| Variable | Example | Becomes |
+|---|---|---|
+| `CERCLE_SERVER_URL` | `https://music.example.com` | `SERVER_URL` (+ `SERVER_LOCK=true`) |
+| `CERCLE_SERVER_NAME` | `Home` | `SERVER_NAME` |
+| `CERCLE_SERVER_TYPE` | `subsonic` | `SERVER_TYPE` (`subsonic` = OpenSubsonic) |
+| `CERCLE_HUB_URL` | | `CERCLE_HUB_URL` (default: server origin + `/hub`) |
+| `CERCLE_HOME` | `true` | `CERCLE_HOME` |
+| `CERCLE_LANGUAGE` | `fr` | `FS_GENERAL_LANGUAGE` |
+| `CERCLE_DEVICE_LOGIN_URL` | `https://example.com/api/device` | `CERCLE_DEVICE_LOGIN_URL` (below) |
+
+### Desktop sign-in through the browser (`CERCLE_DEVICE_LOGIN_URL`)
+
+When set, the login form gets a **Sign in with the browser** button (`features/cercle/device/`). It is
+a device flow against a small companion service you run next to the server (not part of this repo):
+
+1. `POST {url}/start` → `{ device_code, user_code, verification_url, interval, expires_in }`. The app
+   shows `user_code` and opens `verification_url` in the system browser.
+2. There the person signs in (e.g. single sign-on in front of the server), checks the code and
+   approves; the service attaches that person's music username and password to the request.
+3. The app polls `POST {url}/poll {device_code}`: `202` pending, `200 { username, password }` once,
+   `4xx` expired. It then logs in exactly as the password form would (and remembers the password).
+
+`{url}` must answer CORS for the desktop origin (`Access-Control-Allow-Origin: *` is fine: the
+`device_code` is the secret and nothing rides on cookies).
+
 ## Hub URL
 
 Resolved in this order:

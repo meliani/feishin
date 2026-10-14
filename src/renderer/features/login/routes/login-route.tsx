@@ -14,6 +14,7 @@ import {
     isLegacyAuth,
     isServerLock,
 } from '/@/renderer/features/action-required/utils/window-properties';
+import { CercleDeviceLogin } from '/@/renderer/features/cercle/device/cercle-device-login';
 import { CercleSsoLogin } from '/@/renderer/features/cercle/sso/cercle-sso-login';
 import JellyfinIcon from '/@/renderer/features/servers/assets/jellyfin.png';
 import NavidromeIcon from '/@/renderer/features/servers/assets/navidrome.png';
@@ -194,7 +195,7 @@ const LoginRoute = () => {
         );
     }
 
-    const handleSubmit = form.onSubmit(async (values) => {
+    const login = async (values: { password: string; username: string }) => {
         const authFunction = api.controller.authenticate;
 
         if (!authFunction) {
@@ -292,7 +293,9 @@ const LoginRoute = () => {
         }
 
         return setIsLoading(false);
-    });
+    };
+
+    const handleSubmit = form.onSubmit(login);
 
     const isSubmitDisabled = !showQuickConnect && (!form.values.username || !form.values.password);
     const serverIcon = SERVER_ICONS[serverType as ServerType];
@@ -368,6 +371,13 @@ const LoginRoute = () => {
                                         defaultValue: 'Login',
                                     })}
                                 </Button>
+                            )}
+                            {!showQuickConnect && (
+                                <CercleDeviceLogin
+                                    onCredentials={async (credentials) => {
+                                        await login(credentials);
+                                    }}
+                                />
                             )}
                             {showQuickConnect && (
                                 <JellyfinQuickConnectButton

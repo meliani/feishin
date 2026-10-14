@@ -1,3 +1,6 @@
+// Must run before anything reads window.SERVER_* / window.FS_* (desktop builds only).
+import '/@/renderer/features/cercle/desktop/cercle-desktop-defaults';
+
 import {
     PersistedClient,
     Persister,
