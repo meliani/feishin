@@ -1,9 +1,20 @@
 # Cercle desktop builds: Windows x64 and macOS Intel (x64) only, built by
-# .github/workflows/cercle-desktop.yml. Everything else comes from electron-builder.yml.
-extends: ./electron-builder.yml
+# .github/workflows/cercle-desktop.yml. Standalone on purpose: with `extends`, electron-builder
+# appends the base file's arm64 targets instead of replacing them.
+# Keep in sync with electron-builder.yml when upstream changes it.
 appId: io.github.meliani.feishin-cercle
 productName: Feishin Cercle
 artifactName: Feishin-Cercle-${version}-${os}-${arch}.${ext}
+electronVersion: 43.7.0
+directories:
+    buildResources: assets
+files:
+    - 'out/**/*'
+    - 'package.json'
+extraResources:
+    - assets/**
+asarUnpack:
+    - resources/**
 win:
     target:
         - target: nsis
@@ -13,6 +24,14 @@ win:
           arch:
               - x64
     icon: assets/icons/icon.ico
+
+nsis:
+    allowToChangeInstallationDirectory: true
+    oneClick: false
+    shortcutName: ${productName}
+    uninstallDisplayName: ${productName}
+    createDesktopShortcut: always
+
 mac:
     target:
         - target: dmg
@@ -29,5 +48,13 @@ mac:
     entitlementsInherit: build/entitlements.mac.plist
     gatekeeperAssess: false
     notarize: false
+    extendInfo:
+        NSAudioCaptureUsageDescription: 'System audio access is required for mpv visualizer capture in Feishin'
+        NSLocalNetworkUsageDescription: 'Local network is necessary for accessing servers hosted on the same system as Feishin'
+
+dmg:
+    contents: [{ x: 130, y: 220 }, { x: 410, y: 220, type: link, path: /Applications }]
+
+npmRebuild: false
 # Releases are created by the workflow; the app does not auto-update (see src/main/env.ts).
 publish: null

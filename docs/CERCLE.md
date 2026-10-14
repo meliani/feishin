@@ -46,7 +46,8 @@ placeholder `cercle-proxy-session` instead of a JWT, and no bearer header is sen
 
 ## Desktop builds (Windows, macOS Intel)
 
-`.github/workflows/cercle-desktop.yml` builds the Electron app with `electron-builder-cercle.yml`
+`.github/workflows/cercle-desktop.yml` builds the Electron app with `electron-builder-cercle.yml` (standalone copy of the
+base config — `extends` would append the arm64 targets)
 (Windows x64 NSIS installer + zip, macOS x64 dmg + zip — Intel Macs; the Apple Silicon runner
 cross-builds x64) and publishes a GitHub release `cercle-desktop-v<version>-cercle.<run>`. Start it
 by pushing a tag `cercle-desktop-*` (**Run workflow** in the Actions tab appears only once the

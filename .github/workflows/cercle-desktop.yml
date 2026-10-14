@@ -63,7 +63,7 @@ jobs:
                   max_attempts: 2
                   retry_on: error
                   shell: bash # Windows default is Windows PowerShell 5, which has no &&
-                  command: pnpm run build && pnpm exec electron-builder --config electron-builder-cercle.yml --${{ matrix.platform }} --x64 --publish never
+                  command: pnpm run build && pnpm exec electron-builder --config electron-builder-cercle.yml --${{ matrix.platform }} --publish never
 
             - uses: actions/upload-artifact@v4
               with:
