@@ -138,7 +138,8 @@ Kept to registration one-liners so rebases stay easy:
 | File | Change |
 |---|---|
 | `src/renderer/router/app-router.tsx` | lazy import + `<Route path="/cercle/*">`; `HomeRoute` wrapped in `<CercleHomeRedirect>` |
-| `src/renderer/features/login/routes/login-route.tsx` | login form wrapped in `<CercleSsoLogin>` |
+| `src/renderer/features/login/routes/login-route.tsx` | login form wrapped in `<CercleSsoLogin>`; submit body extracted to `login()` and reused by `<CercleDeviceLogin>` under the button |
+| `src/renderer/main.tsx` | first import: `features/cercle/desktop/cercle-desktop-defaults` (desktop builds only) |
 | `src/renderer/api/navidrome/navidrome-api.ts` | `retryWithNavidromeSso` first in the 401 handler (no-op unless `CERCLE_SSO_LOGIN`) |
 | `src/renderer/features/sidebar/components/sidebar.tsx` | `<CercleSidebarSection placement="top" />` above the library, `<CercleSidebarSection />` below it, `'cercle'` in accordion `defaultValue` |
 | `src/renderer/features/sidebar/components/mobile-sidebar.tsx` | same |
