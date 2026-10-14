@@ -5,6 +5,11 @@
 // The person opens verification_url in their browser, signs in there (single sign-on), checks
 // that the code matches and approves; the app then receives the music password once.
 
+export type DeviceLoginResult =
+    | { password: string; status: 'approved'; username: string }
+    | { status: 'expired' }
+    | { status: 'pending' };
+
 export type DeviceLoginStart = {
     device_code: string;
     expires_in: number;
@@ -12,11 +17,6 @@ export type DeviceLoginStart = {
     user_code: string;
     verification_url: string;
 };
-
-export type DeviceLoginResult =
-    | { password: string; status: 'approved'; username: string }
-    | { status: 'expired' }
-    | { status: 'pending' };
 
 export const getDeviceLoginBase = () => (window.CERCLE_DEVICE_LOGIN_URL || '').replace(/\/$/, '');
 
