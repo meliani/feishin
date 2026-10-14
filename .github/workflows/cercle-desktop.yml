@@ -1,0 +1,103 @@
+# Builds the Cercle desktop app for Windows (x64) and macOS Intel (x64) and publishes a release.
+# Run it from the Actions tab ("Run workflow"), or push a tag named cercle-desktop-*.
+name: Cercle desktop apps
+
+on:
+    workflow_dispatch:
+        inputs:
+            release:
+                description: 'Publish a GitHub release with the installers'
+                type: boolean
+                default: true
+    push:
+        tags:
+            - 'cercle-desktop-*'
+
+concurrency:
+    group: cercle-desktop-${{ github.ref }}
+    cancel-in-progress: false
+
+jobs:
+    version:
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.v.outputs.version }}
+        steps:
+            - uses: actions/checkout@v6
+            - id: v
+              run: echo "version=$(node -p "require('./package.json').version")-cercle.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+    build:
+        needs: version
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - os: windows-latest
+                      platform: win
+                    # Apple Silicon runner, x64 (Intel) output: electron-builder cross-builds it.
+                    - os: macos-latest
+                      platform: mac
+        env:
+            NODE_OPTIONS: --max-old-space-size=4096
+            MAIN_VITE_CERCLE_DESKTOP: 'true'
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Install Node and PNPM
+              uses: pnpm/action-setup@v4
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Set the build version
+              shell: bash
+              run: npm pkg set version=${{ needs.version.outputs.version }}
+
+            - name: Build
+              uses: nick-invision/retry@v3.0.2
+              with:
+                  timeout_minutes: 40
+                  max_attempts: 2
+                  retry_on: error
+                  command: pnpm run build && pnpm exec electron-builder --config electron-builder-cercle.yml --${{ matrix.platform }} --x64 --publish never
+
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: feishin-cercle-${{ matrix.platform }}
+                  if-no-files-found: error
+                  retention-days: 30
+                  path: |
+                      dist/*.exe
+                      dist/*.dmg
+                      dist/*.zip
+
+    release:
+        needs: [version, build]
+        if: github.event_name == 'push' || inputs.release
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/download-artifact@v4
+              with:
+                  path: dist
+                  merge-multiple: true
+            - name: Publish the release
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  VERSION: ${{ needs.version.outputs.version }}
+              run: |
+                  ls -la dist
+                  gh release create "cercle-desktop-v$VERSION" dist/* \
+                    --repo "$GITHUB_REPOSITORY" \
+                    --target "$GITHUB_SHA" \
+                    --title "Feishin Cercle $VERSION (Windows, macOS Intel)" \
+                    --latest=false \
+                    --notes "Feishin with the Cercle section, for Windows (x64) and macOS on Intel Macs (x64, macOS 12 Monterey or newer).
+
+                  - Windows: \`Feishin-Cercle-$VERSION-win-x64.exe\` (installer) or the \`.zip\` (portable).
+                  - macOS (Intel): \`Feishin-Cercle-$VERSION-mac-x64.dmg\`. The app is not notarized: the first time, right-click the app → Open → Open. If macOS says it is damaged, run \`xattr -cr \"/Applications/Feishin Cercle.app\"\` once.
+
+                  Add your server as type **OpenSubsonic** (not Navidrome) when it sits behind single sign-on. Automatic updates are off in these builds; download the next release here."

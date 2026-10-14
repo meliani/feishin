@@ -44,6 +44,22 @@ placeholder `cercle-proxy-session` instead of a JWT, and no bearer header is sen
 (proxy session or JWT expired) the same request renews the session silently and replays the call. If the proxy session is gone or the page has no
 `auth`, the normal password form appears with a short note. Code: `features/cercle/sso/`.
 
+## Desktop builds (Windows, macOS Intel)
+
+`.github/workflows/cercle-desktop.yml` builds the Electron app with `electron-builder-cercle.yml`
+(Windows x64 NSIS installer + zip, macOS x64 dmg + zip — Intel Macs; the Apple Silicon runner
+cross-builds x64) and publishes a GitHub release `cercle-desktop-v<version>-cercle.<run>`. Start it
+from the Actions tab (**Run workflow**) or push a tag `cercle-desktop-*`. The macOS build is ad-hoc
+signed, not notarized (first launch: right-click → Open). Electron 43 needs macOS 12 or newer.
+
+The build sets `MAIN_VITE_CERCLE_DESKTOP=true`, which turns the auto-updater off
+(`src/main/env.ts`): upstream's updater checks upstream's releases and would replace the fork with
+plain Feishin.
+
+On the desktop, `CERCLE_SSO_LOGIN` does not apply. Behind an authenticating reverse proxy, add the
+server as **OpenSubsonic** (the native Navidrome API sits behind the proxy login); the hub then needs
+the desktop origin in `CERCLE_CORS_ORIGINS` (`null,file://`).
+
 ## Hub URL
 
 Resolved in this order:
@@ -96,6 +112,7 @@ Kept to registration one-liners so rebases stay easy:
 | `src/renderer/features/context-menu/menus/{song,album,album-artist,artist}-context-menu.tsx` | `<HideFromCercleAction />` |
 | `src/shared/components/icon/icon.tsx` | a few Lucide icons in `AppIcon` |
 | `src/renderer/global.d.ts`, `settings.js.template`, `Dockerfile` | `CERCLE_HUB_URL`, `CERCLE_SSO_LOGIN`, `CERCLE_HOME` |
+| `src/main/env.ts`, `electron-builder-cercle.yml`, `.github/workflows/cercle-desktop.yml` | desktop builds without the upstream auto-updater |
 | `commitlint.config.mjs`, `docs/agents/commits.md` | `cercle` commit scope |
 | `.github/workflows/cercle-docker.yml` | image build for this fork (new file) |
 

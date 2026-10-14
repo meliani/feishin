@@ -1,0 +1,33 @@
+# Cercle desktop builds: Windows x64 and macOS Intel (x64) only, built by
+# .github/workflows/cercle-desktop.yml. Everything else comes from electron-builder.yml.
+extends: ./electron-builder.yml
+appId: io.github.meliani.feishin-cercle
+productName: Feishin Cercle
+artifactName: Feishin-Cercle-${version}-${os}-${arch}.${ext}
+win:
+    target:
+        - target: nsis
+          arch:
+              - x64
+        - target: zip
+          arch:
+              - x64
+    icon: assets/icons/icon.ico
+mac:
+    target:
+        - target: dmg
+          arch:
+              - x64
+        - target: zip
+          arch:
+              - x64
+    icon: media/feishin.icon
+    type: distribution
+    hardenedRuntime: false
+    identity: '-'
+    entitlements: build/entitlements.mac.plist
+    entitlementsInherit: build/entitlements.mac.plist
+    gatekeeperAssess: false
+    notarize: false
+# Releases are created by the workflow; the app does not auto-update (see src/main/env.ts).
+publish: null
