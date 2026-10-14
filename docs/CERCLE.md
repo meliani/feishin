@@ -49,7 +49,8 @@ placeholder `cercle-proxy-session` instead of a JWT, and no bearer header is sen
 `.github/workflows/cercle-desktop.yml` builds the Electron app with `electron-builder-cercle.yml`
 (Windows x64 NSIS installer + zip, macOS x64 dmg + zip — Intel Macs; the Apple Silicon runner
 cross-builds x64) and publishes a GitHub release `cercle-desktop-v<version>-cercle.<run>`. Start it
-from the Actions tab (**Run workflow**) or push a tag `cercle-desktop-*`. The macOS build is ad-hoc
+by pushing a tag `cercle-desktop-*` (**Run workflow** in the Actions tab appears only once the
+workflow is on the repository's default branch). The macOS build is ad-hoc
 signed, not notarized (first launch: right-click → Open). Electron 43 needs macOS 12 or newer.
 
 The build sets `MAIN_VITE_CERCLE_DESKTOP=true`, which turns the auto-updater off

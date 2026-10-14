@@ -1,5 +1,6 @@
 # Builds the Cercle desktop app for Windows (x64) and macOS Intel (x64) and publishes a release.
-# Run it from the Actions tab ("Run workflow"), or push a tag named cercle-desktop-*.
+# Push a tag named cercle-desktop-* to build and release (e.g. cercle-desktop-2026.10.14).
+# "Run workflow" in the Actions tab only appears once this file is on the default branch.
 name: Cercle desktop apps
 
 on:
@@ -61,6 +62,7 @@ jobs:
                   timeout_minutes: 40
                   max_attempts: 2
                   retry_on: error
+                  shell: bash # Windows default is Windows PowerShell 5, which has no &&
                   command: pnpm run build && pnpm exec electron-builder --config electron-builder-cercle.yml --${{ matrix.platform }} --x64 --publish never
 
             - uses: actions/upload-artifact@v4
