@@ -4,6 +4,11 @@
 # Keep in sync with electron-builder.yml when upstream changes it.
 appId: io.github.meliani.feishin-cercle
 productName: Feishin Cercle
+# Own settings folder (%APPDATA%/Feishin Cercle, ~/Library/Application Support/Feishin Cercle):
+# with upstream's name both apps shared one profile, and SERVER_LOCK prunes every other server.
+extraMetadata:
+    name: feishin-cercle
+    productName: Feishin Cercle
 artifactName: Feishin-Cercle-${version}-${os}-${arch}.${ext}
 electronVersion: 43.7.0
 directories:
