@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { isAnalyticsEnvDisabled } from '/@/renderer/features/analytics/hooks/use-analytics-disabled';
 import {
     SettingOption,
     SettingsSection,
@@ -9,12 +10,14 @@ import { Switch } from '/@/shared/components/switch/switch';
 
 export const AnalyticsSettings = memo(() => {
     const { t } = useTranslation();
+    // The image turned analytics off for everyone (ANALYTICS_DISABLED): the switch would do nothing.
+    const isEnvDisabled = isAnalyticsEnvDisabled();
 
     const handleSetSendAnalytics = (send: boolean) => {
         if (send) {
-            localStorage.removeItem('umami.disabled');
+            localStorage.setItem('umami.enabled', '1');
         } else {
-            localStorage.setItem('umami.disabled', '1');
+            localStorage.removeItem('umami.enabled');
         }
     };
 
@@ -23,7 +26,8 @@ export const AnalyticsSettings = memo(() => {
             control: (
                 <Switch
                     aria-label={t('setting.analyticsEnable')}
-                    defaultChecked={localStorage.getItem('umami.disabled') !== '1'}
+                    defaultChecked={!isEnvDisabled && localStorage.getItem('umami.enabled') === '1'}
+                    disabled={isEnvDisabled}
                     onChange={(e) => handleSetSendAnalytics(e.currentTarget.checked)}
                 />
             ),

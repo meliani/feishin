@@ -9,8 +9,9 @@
         <script src="settings.js"></script>
         <% } %>
         <script>
+            // Cercle: usage analytics go to upstream's Umami, so they are opt-in (umami.enabled).
             (function () {
-                if (localStorage.getItem('umami.disabled') !== '1' && window.ANALYTICS_DISABLED !== true && window.ANALYTICS_DISABLED !== 'true') {
+                if (localStorage.getItem('umami.enabled') === '1' && window.ANALYTICS_DISABLED !== true && window.ANALYTICS_DISABLED !== 'true') {
                     var s = document.createElement('script');
                     s.defer = true;
                     s.src = 'https://umami.jeffvli.org/script.js';
