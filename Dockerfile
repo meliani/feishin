@@ -22,7 +22,7 @@ COPY --chown=nginx:nginx ./settings.js.template /etc/nginx/templates/settings.js
 COPY --chown=nginx:nginx ng.conf.template /etc/nginx/templates/default.conf.template
 
 ENV SERVER_LOCK=false SERVER_NAME="" SERVER_TYPE="" SERVER_URL="" REMOTE_URL=""
-ENV LEGACY_AUTHENTICATION="" ANALYTICS_DISABLED="" PUBLIC_PATH="/" CERCLE_HUB_URL="" CERCLE_SSO_LOGIN="" CERCLE_HOME=""
+ENV LEGACY_AUTHENTICATION="" ANALYTICS_DISABLED="" PUBLIC_PATH="/" CERCLE_HUB_URL="" CERCLE_SSO_LOGIN="" CERCLE_HOME="" CERCLE_SIMPLE=""
 
 EXPOSE 9180
 CMD ["nginx", "-g", "daemon off;"]

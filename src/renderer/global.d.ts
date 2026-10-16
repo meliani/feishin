@@ -4,6 +4,7 @@ declare global {
         CERCLE_DEVICE_LOGIN_URL?: string;
         CERCLE_HOME?: boolean | string;
         CERCLE_HUB_URL?: string;
+        CERCLE_SIMPLE?: boolean | string;
         CERCLE_SSO_LOGIN?: boolean | string;
         FS_AUTO_DJ_ALBUM_STRATEGY?: string;
         FS_AUTO_DJ_ALLOW_DUPLICATES?: string;

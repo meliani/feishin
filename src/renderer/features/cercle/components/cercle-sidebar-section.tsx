@@ -1,8 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 
+import styles from './cercle-sidebar-section.module.css';
+
 import '/@/renderer/features/cercle/i18n/cercle-i18n';
-import { isCercleHomeEnabled } from '/@/renderer/features/cercle/utils/cercle-env';
+import {
+    isCercleHomeEnabled,
+    isCercleSimpleEnabled,
+} from '/@/renderer/features/cercle/utils/cercle-env';
 import { CollapsedSidebarItem } from '/@/renderer/features/sidebar/components/collapsed-sidebar-item';
 import { SidebarItem } from '/@/renderer/features/sidebar/components/sidebar-item';
 import { Accordion } from '/@/shared/components/accordion/accordion';
@@ -31,6 +36,18 @@ export const CercleSidebarSection = ({ placement = 'default' }: { placement?: Pl
 
     if (!isPlacementActive(placement)) {
         return null;
+    }
+
+    // Simple layout: one entry, the Cercle pages carry their own tabs.
+    if (isCercleSimpleEnabled()) {
+        return (
+            <SidebarItem className={styles.single} to="/cercle">
+                <Group gap="md">
+                    <Icon icon="cercle" size="lg" />
+                    {t('cercle.title')}
+                </Group>
+            </SidebarItem>
+        );
     }
 
     return (

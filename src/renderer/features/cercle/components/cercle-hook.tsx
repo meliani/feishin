@@ -1,11 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 
 import { cercleKeys } from '/@/renderer/features/cercle/api/cercle-api';
 import { applyCercleMessage } from '/@/renderer/features/cercle/api/cercle-cache';
 import { resolveHubUrl } from '/@/renderer/features/cercle/api/cercle-client';
 import { cercleSocket } from '/@/renderer/features/cercle/api/cercle-socket';
 import { useRoomSync } from '/@/renderer/features/cercle/hooks/use-room-sync';
+import { applyCercleSimpleLayout } from '/@/renderer/features/cercle/simple/cercle-simple-layout';
 import '/@/renderer/features/cercle/i18n/cercle-i18n';
 import {
     useCercleHubUrlSetting,
@@ -58,6 +59,8 @@ const useCercleLiveConnection = () => {
 };
 
 export const CercleHook = () => {
+    // Before the first paint, so the full upstream sidebar never flashes.
+    useLayoutEffect(applyCercleSimpleLayout, []);
     useCercleLiveConnection();
     useRoomSync();
     return null;

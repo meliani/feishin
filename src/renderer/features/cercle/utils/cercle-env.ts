@@ -10,6 +10,10 @@ const isEnvTrue = (value: boolean | string | undefined) => value === true || val
 export const isCercleHomeEnabled = () =>
     typeof window !== 'undefined' && isEnvTrue(window.CERCLE_HOME);
 
+// Short, Spotify-like sidebar and home page (features/cercle/simple), with one Cercle entry.
+export const isCercleSimpleEnabled = () =>
+    typeof window !== 'undefined' && isEnvTrue(window.CERCLE_SIMPLE);
+
 // Sign in through Navidrome's reverse-proxy authentication instead of the password form.
 // Only meaningful for the web build locked to one Navidrome server.
 export const isCercleSsoEnabled = () =>

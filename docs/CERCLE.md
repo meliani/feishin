@@ -29,6 +29,7 @@ All are optional and empty by default; they are written into `settings.js` at co
 | `CERCLE_HUB_URL` | URL or path (`/hub`) | Hub address, see below. |
 | `CERCLE_SSO_LOGIN` | `true` / empty | Sign in without a password through a reverse proxy that authenticates users for Navidrome (Navidrome `ExtAuth`). Needs `SERVER_LOCK=true`, `SERVER_TYPE=navidrome`, and Navidrome reachable from the browser with the proxy cookie (same site). |
 | `CERCLE_HOME` | `true` / empty | Open on the Cercle feed instead of the Feishin home page (first visit to `/` per page load) and show the Cercle sidebar section above the library. |
+| `CERCLE_SIMPLE` | `true` / empty | Short, Spotify-like layout: the sidebar shows one **Cercle** entry, then Home, Favorites, Albums, Artists and the playlists; the home page keeps recently played, recently added, most played, random and playlists; star ratings are hidden. Applied once per browser as ordinary settings (`features/cercle/simple/`), so people can turn anything back on in Settings. |
 | `FS_GENERAL_LANGUAGE` | e.g. `fr` | Upstream Feishin setting: default UI language on first run. Cercle ships English and French. |
 
 ### Single sign-on (`CERCLE_SSO_LOGIN`)
@@ -77,6 +78,7 @@ server. All optional; with none set the build behaves like upstream.
 | `CERCLE_SERVER_TYPE` | `subsonic` | `SERVER_TYPE` (`subsonic` = OpenSubsonic) |
 | `CERCLE_HUB_URL` | | `CERCLE_HUB_URL` (default: server origin + `/hub`) |
 | `CERCLE_HOME` | `true` | `CERCLE_HOME` |
+| `CERCLE_SIMPLE` | `true` | `CERCLE_SIMPLE` |
 | `CERCLE_LANGUAGE` | `fr` | `FS_GENERAL_LANGUAGE` |
 | `CERCLE_DEVICE_LOGIN_URL` | `https://example.com/api/device` | `CERCLE_DEVICE_LOGIN_URL` (below) |
 
@@ -119,6 +121,7 @@ services:
             CERCLE_HUB_URL: https://navidrome.example.com/hub
             CERCLE_SSO_LOGIN: 'true'
             CERCLE_HOME: 'true'
+            CERCLE_SIMPLE: 'true'
             FS_GENERAL_LANGUAGE: fr
             ANALYTICS_DISABLED: 'true'
         ports:
@@ -147,7 +150,8 @@ Kept to registration one-liners so rebases stay easy:
 | `src/renderer/features/player/components/audio-players.tsx` | `<CercleHook />` next to `<ScrobbleHook />` |
 | `src/renderer/features/context-menu/menus/{song,album,album-artist,artist}-context-menu.tsx` | `<HideFromCercleAction />` |
 | `src/shared/components/icon/icon.tsx` | a few Lucide icons in `AppIcon` |
-| `src/renderer/global.d.ts`, `settings.js.template`, `Dockerfile` | `CERCLE_HUB_URL`, `CERCLE_SSO_LOGIN`, `CERCLE_HOME` |
+| `src/renderer/global.d.ts`, `settings.js.template`, `Dockerfile` | `CERCLE_HUB_URL`, `CERCLE_SSO_LOGIN`, `CERCLE_HOME`, `CERCLE_SIMPLE` |
+| `src/renderer/index.html`, `features/analytics/hooks/use-analytics-disabled.ts`, `features/settings/components/advanced/analytics-settings.tsx` | usage analytics (upstream's Umami) are opt-in: off unless the person turns them on (`umami.enabled`); the switch is greyed out when the image sets `ANALYTICS_DISABLED` |
 | `src/main/env.ts`, `electron-builder-cercle.yml`, `.github/workflows/cercle-desktop.yml` | desktop builds without the upstream auto-updater |
 | `commitlint.config.mjs`, `docs/agents/commits.md` | `cercle` commit scope |
 | `.github/workflows/cercle-docker.yml` | image build for this fork (new file) |
