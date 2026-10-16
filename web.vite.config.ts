@@ -78,8 +78,11 @@ export default defineConfig({
             },
             filename: 'assets/sw.js',
             injectRegister: 'inline',
+            // Cercle: paths are relative to the manifest (assets/), so the installed app opens the
+            // player wherever it is served (PUBLIC_PATH, e.g. /cercle/), not the site root.
             manifest: {
-                background_color: '#FFDCB5',
+                background_color: '#000000',
+                description: 'Music with your circles.',
                 display: 'standalone',
                 icons: [
                     {
@@ -95,6 +98,11 @@ export default defineConfig({
                     {
                         sizes: '128x128',
                         src: '128x128.png',
+                        type: 'image/png',
+                    },
+                    {
+                        sizes: '192x192',
+                        src: '../cercle-icon-192.png',
                         type: 'image/png',
                     },
                     {
@@ -114,8 +122,9 @@ export default defineConfig({
                         type: 'image/png',
                     },
                 ],
-                name: 'Feishin',
+                name: 'Cercle',
                 orientation: 'portrait',
+                scope: '../',
                 screenshots: [
                     {
                         form_factor: 'wide',
@@ -125,9 +134,9 @@ export default defineConfig({
                         type: 'image/webp',
                     },
                 ],
-                short_name: 'Feishin',
-                start_url: '/',
-                theme_color: '#1E003D',
+                short_name: 'Cercle',
+                start_url: '../',
+                theme_color: '#000000',
             },
             manifestFilename: 'assets/manifest.webmanifest',
             outDir: path.resolve(__dirname, './out/web/'),

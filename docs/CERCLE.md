@@ -154,6 +154,7 @@ Kept to registration one-liners so rebases stay easy:
 | `src/renderer/index.html`, `features/analytics/hooks/use-analytics-disabled.ts`, `features/settings/components/advanced/analytics-settings.tsx` | usage analytics (upstream's Umami) are opt-in: off unless the person turns them on (`umami.enabled`); the switch is greyed out when the image sets `ANALYTICS_DISABLED` |
 | `src/main/env.ts`, `electron-builder-cercle.yml`, `.github/workflows/cercle-desktop.yml` | desktop builds without the upstream auto-updater |
 | `commitlint.config.mjs`, `docs/agents/commits.md` | `cercle` commit scope |
+| `web.vite.config.ts`, `src/renderer/index.html`, `src/renderer/public/` | installable web app ("Add to Home Screen"): manifest named Cercle with `start_url`/`scope` relative to the manifest (works under `PUBLIC_PATH`), 192 px icon, iOS home-screen tags. Behind an authenticating proxy, let `assets/manifest.webmanifest` and the icons through without login: browsers fetch the manifest without cookies |
 | `.github/workflows/cercle-docker.yml` | image build for this fork (new file) |
 
 The sidebar entry is deliberately not part of the user-sortable `sidebarItems` setting, so

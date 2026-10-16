@@ -6,6 +6,13 @@
         <title>Feishin</title>
         <% if (web) { %>
         <link rel="icon" href="./assets/favicon.ico" />
+        <!-- Cercle: home-screen app on iPhone/iPad (Android reads the manifest). -->
+        <link rel="apple-touch-icon" href="./cercle-apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="Cercle" />
+        <meta name="theme-color" content="#000000" />
         <script src="settings.js"></script>
         <% } %>
         <script>
